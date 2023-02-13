@@ -1,31 +1,26 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from 'vue';
 
-//state
-const inputValue = ref<String>('');
+const inputValueTask = ref('');
 
-defineProps({
-    placeholder: String,
-})
-
-defineEmits(['onAddTask'])
+defineEmits(['onGetTask'])
 </script>
 
 <template>
     <div class="input__block">
         <input 
             type="text" 
-            :placeholder="placeholder" 
+            placeholder="New task" 
             class="input" 
-            v-model="inputValue"
+            v-model="inputValueTask"
         >
         <button class="btn"
-            @click="$emit('onAddTask', inputValue), inputValue=''"
+            @click="$emit('onGetTask', inputValueTask), inputValueTask=''"
         >+</button>
     </div>
 </template>
 
-<style scoped lang="scss">
+<style lang="scss">
 @import '@/assets/scss/fonts.scss';
 .input {
     outline: none;
@@ -35,7 +30,6 @@ defineEmits(['onAddTask'])
     font-size: 20px;
     font-family: 'Roboto';
 }
-
 .btn {
     width: 25px;
     height: 25px;
