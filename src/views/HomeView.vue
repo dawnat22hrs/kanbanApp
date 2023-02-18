@@ -5,16 +5,33 @@ import NewColumnInput from '../components/NewColumnInput.vue';
 import Task from '../components/Task.vue';
 
 //state
-const tasks = ref([]);
-const columns = ref([]);
+const storageTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+const storageColumns = JSON.parse(localStorage.getItem('columns')) || [];
+const tasks = ref(storageTasks);
+const columns = ref(storageColumns);
 
 //methods
+const saveTasksLS = () => {
+  localStorage.setItem('tasks', JSON.stringify(tasks.value))
+}
+
+const saveColumnsLS = () => {
+  localStorage.setItem('columns', JSON.stringify(columns.value))
+}
+
+
 const getTask = (value) => {
-  tasks.value.push({id: tasks.value.length, title: value, list: 0})
+  if(value != ''){
+    tasks.value.push({id: tasks.value.length, title: value, list: 0})
+  }
+  saveTasksLS()
 }
 
 const getColumn = (value) => {
-  columns.value.push({id: columns.value.length, title: value})
+  if(value != ''){
+    columns.value.push({id: columns.value.length, title: value})
+  }
+  saveColumnsLS()
 }
 
 const deleteColumn = (id, columns) => {
@@ -23,6 +40,7 @@ const deleteColumn = (id, columns) => {
             columns.splice(idi, 1);
         }
   })
+  saveColumnsLS()
 }
 
 const deleteTask = (id, tasks) => {
@@ -31,6 +49,7 @@ const deleteTask = (id, tasks) => {
             tasks.splice(idi, 1);
         }
   })
+  saveTasksLS()
 }
 
 const onDragStart = (event, task) => {
@@ -44,7 +63,6 @@ const onDrop = (event, list) => {
   const taskID = event.dataTransfer.getData('taskID');
   const task = tasks.value.find((task) => task.id == taskID);
   task.list = list
-  
 }
 </script>
 
